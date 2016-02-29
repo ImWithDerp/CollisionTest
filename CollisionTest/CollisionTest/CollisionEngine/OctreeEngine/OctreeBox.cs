@@ -109,6 +109,51 @@ namespace CollisionTest.CollisionEngine.OctreeEngine
             entities.Add(entity);
         }
 
+        // Test any entities in this box or its children for collisions with others also in this box or in its children
+        public void TestCollisions()
+        {
+            if (childEntities > 0)
+            {
+                CollisionEntity[] entityArray = entities.ToArray();
+
+                for (int i = 0; i < entityArray.Length; i++)
+                {
+                    for (int j = i+1; j < entityArray.Length; j++)
+                        if (entityArray[i].Test(entityArray[j]))
+                        {
+                            entityArray[i].collisions.Add(entityArray[j]);
+                            entityArray[j].collisions.Add(entityArray[i]);
+                        }
+
+                    if (divisions > 0)
+                        foreach (OctreeBox subdiv in subdivs)
+                            subdiv.TestCollisions(entityArray[i]);
+                }
+
+                if (divisions > 0)
+                    foreach (OctreeBox subdiv in subdivs)
+                        subdiv.TestCollisions();
+            }
+        }
+
+        // Test a specific entity for collisions with others in this box or in its children
+        private void TestCollisions(CollisionEntity entity)
+        {
+            if (childEntities > 0)
+            {
+                foreach (CollisionEntity childEntity in entities)
+                    if ( entity.Test(childEntity))
+                    {
+                        entity.collisions.Add(childEntity);
+                        childEntity.collisions.Add(entity);
+                    }
+
+                if (divisions > 0)
+                    foreach (OctreeBox subdiv in subdivs)
+                        subdiv.TestCollisions(entity);
+            }
+        }
+
         OctreeBox SubdivMinMinMin
         {
             get { return subdivs[0]; }

@@ -29,6 +29,8 @@ namespace CollisionTest.CollisionEngine.OctreeEngine
                     rootBox.ForceAssign(entity);
                 }
             }
+
+            rootBox.TestCollisions();
         }
     }
 }

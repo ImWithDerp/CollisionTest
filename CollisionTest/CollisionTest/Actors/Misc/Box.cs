@@ -26,6 +26,7 @@ namespace CollisionTest.Actors.Misc
         {
             dummyTexture = new Texture2D(graphicsDevice, 1, 1);
             dummyTexture.SetData(new Color[] { Color.White });
+            Colori = Color.White;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

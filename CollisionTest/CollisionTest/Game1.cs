@@ -28,7 +28,8 @@ namespace CollisionTest
             Content.RootDirectory = "Content";
 
             currentStage = new Stage();
-            Actors.Misc.Box box = new Actors.Misc.Box(new Vector3(-10, -10, -10), new Vector3(10, 10, 10), this);
+            Actors.Misc.Box box = new Actors.Misc.Box(new Vector3(-100, -100, -100), new Vector3(100, 100, 100), this);
+            box.position = new Vector3(300, 300, 0);
 
             currentStage.RegisterActor(box);
         }
@@ -50,6 +51,8 @@ namespace CollisionTest
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
+        // This is a texture we can render.
+
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
@@ -75,10 +78,10 @@ namespace CollisionTest
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState(PlayerIndex.One).GetPressedKeys().Contains(Keys.Escape))
                 this.Exit();
 
-            // TODO: Add your update logic here
+            currentStage.actors.First.Value.position.Z += 1;
 
             base.Update(gameTime);
         }
@@ -91,9 +94,11 @@ namespace CollisionTest
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
-            // TODO: Add your drawing code here
+            // Draw the sprite.
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+
             currentStage.Draw(spriteBatch);
+
             spriteBatch.End();
 
             base.Draw(gameTime);

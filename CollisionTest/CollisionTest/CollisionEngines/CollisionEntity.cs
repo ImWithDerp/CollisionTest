@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 // Base class for entities that can collide with each other
 
-namespace CollisionTest.CollisionEngine
+namespace CollisionTest.CollisionEngines
 {
     abstract class CollisionEntity
     {

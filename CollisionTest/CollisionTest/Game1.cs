@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using CollisionTest.Stages;
 
 namespace CollisionTest
 {
@@ -19,10 +20,17 @@ namespace CollisionTest
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        public static Stage currentStage;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            currentStage = new Stage();
+            Actors.Misc.Box box = new Actors.Misc.Box(new Vector3(-10, -10, -10), new Vector3(10, 10, 10), this);
+
+            currentStage.RegisterActor(box);
         }
 
         /// <summary>
@@ -47,7 +55,7 @@ namespace CollisionTest
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            currentStage.Load(GraphicsDevice);
         }
 
         /// <summary>
@@ -83,7 +91,10 @@ namespace CollisionTest
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            spriteBatch.Begin();
             // TODO: Add your drawing code here
+            currentStage.Draw(spriteBatch);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

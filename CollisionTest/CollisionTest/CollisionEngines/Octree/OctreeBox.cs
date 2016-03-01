@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace CollisionTest.CollisionEngine.OctreeEngine
+namespace CollisionTest.CollisionEngines.Octree
 {
     // Octree division
     class OctreeBox

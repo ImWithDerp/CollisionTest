@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace CollisionTest.CollisionEngine.OctreeEngine
+namespace CollisionTest.CollisionEngines.Octree
 {
     class OctreeEngine : CollisionEngine
     {
@@ -17,7 +17,7 @@ namespace CollisionTest.CollisionEngine.OctreeEngine
             rootBox.Fill();
         }
 
-        public override void TestCollisions(List<CollisionEntity> entities)
+        public override void TestCollisions(LinkedList<CollisionEntity> entities)
         {
             rootBox.Reset();
 

@@ -5,7 +5,7 @@ using System.Text;
 
 // Base class for collision engines
 
-namespace CollisionTest.CollisionEngine
+namespace CollisionTest.CollisionEngines
 {
     abstract class CollisionEngine
     {

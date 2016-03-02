@@ -17,7 +17,7 @@ namespace CollisionTest.CollisionEngines.Octree
             rootBox.Fill();
         }
 
-        public override void TestCollisions(LinkedList<CollisionEntity> entities)
+        protected override void TestCollisions(LinkedList<CollisionEntity> entities)
         {
             rootBox.Reset();
 

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using CollisionTest.Stages;
+using CollisionTest.CollisionEngines;
 
 namespace CollisionTest
 {
@@ -21,6 +22,7 @@ namespace CollisionTest
         SpriteBatch spriteBatch;
 
         public static Stage currentStage;
+        public static CollisionEngine currentCollisionEngine;
 
         public Game1()
         {
@@ -28,10 +30,38 @@ namespace CollisionTest
             Content.RootDirectory = "Content";
 
             currentStage = new Stage();
-            Actors.Misc.Box box = new Actors.Misc.Box(new Vector3(-100, -100, -100), new Vector3(100, 100, 100), this);
-            box.position = new Vector3(300, 300, 0);
 
-            currentStage.RegisterActor(box);
+            currentStage.camera.position.Y = -0;
+
+            currentCollisionEngine = new CollisionEngines.Octree.OctreeEngine(new BoundingBox(new Vector3(-1024, -1024, -1024), new Vector3(1024, 1024, 1024)), 4);
+
+            Actors.Misc.Box box1 = new Actors.Misc.Box(new Vector3(-100, -100, -100), new Vector3(100, 100, 100));
+            box1.position = new Vector3(-200, 0, 0);
+            box1.velocity = new Vector3(1, (float)0.4, 0);
+
+            Actors.Misc.Box box2 = new Actors.Misc.Box(new Vector3(-50, -50, -100), new Vector3(50, 50, 50));
+            box2.position = new Vector3(200, 0, 0);
+            box2.velocity = new Vector3(-1, (float)-0.3, 0);
+
+            Actors.Misc.Box wall1 = new Actors.Misc.Box(new Vector3(-1, -200, -300), new Vector3(1, 200, 300));
+            wall1.position = new Vector3(-300, 0, 0);
+
+            Actors.Misc.Box wall2 = new Actors.Misc.Box(new Vector3(-1, -200, -300), new Vector3(1, 200, 300));
+            wall2.position = new Vector3(300, 0, 0);
+
+            Actors.Misc.Box wall3 = new Actors.Misc.Box(new Vector3(-300, -1, -300), new Vector3(300, 1, 300));
+            wall3.position = new Vector3(0, -200, 0);
+
+            Actors.Misc.Box wall4 = new Actors.Misc.Box(new Vector3(-300, -1, -300), new Vector3(300, 1, 300));
+            wall4.position = new Vector3(0, 200, 0);
+
+            currentStage.RegisterActor(box1);
+            currentStage.RegisterActor(box2);
+
+            currentStage.RegisterActor(wall1);
+            currentStage.RegisterActor(wall2);
+            currentStage.RegisterActor(wall3);
+            currentStage.RegisterActor(wall4);
         }
 
         /// <summary>
@@ -81,7 +111,9 @@ namespace CollisionTest
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState(PlayerIndex.One).GetPressedKeys().Contains(Keys.Escape))
                 this.Exit();
 
-            currentStage.actors.First.Value.position.Z += 1;
+            currentStage.Update(gameTime);
+
+            currentCollisionEngine.ProcessCollisions();
 
             base.Update(gameTime);
         }
@@ -94,8 +126,11 @@ namespace CollisionTest
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            // Transform view to center around camera position
+            Matrix transformMatrix = Matrix.CreateTranslation(new Vector3((float)(graphics.GraphicsDevice.Viewport.Width*0.5), (float)(graphics.GraphicsDevice.Viewport.Height*0.5), 0));
+
             // Draw the sprite.
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, transformMatrix);
 
             currentStage.Draw(spriteBatch);
 

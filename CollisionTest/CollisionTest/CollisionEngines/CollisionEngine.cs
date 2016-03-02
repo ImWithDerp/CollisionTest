@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CollisionTest.CollisionEngines
 {
-    abstract class CollisionEngine
+    public abstract class CollisionEngine
     {
         private LinkedList<CollisionEntity> entities = new LinkedList<CollisionEntity>();
         
@@ -38,10 +38,11 @@ namespace CollisionTest.CollisionEngines
             TestCollisions(entities);
 
             foreach (CollisionEntity entity in entities)
-                entity.React();
+                if (entity.collisions.Count > 0)
+                    entity.React();
         }
 
         // Check which entities are colliding
-        public abstract void TestCollisions(LinkedList<CollisionEntity> entities);
+        protected abstract void TestCollisions(LinkedList<CollisionEntity> entities);
     }
 }

@@ -39,6 +39,8 @@ namespace CollisionTest.CollisionEngines.Octree
                         for (int z = 0; z < 2; z++)
                         {
                             subdivs[index] = new OctreeBox(new BoundingBox(new Vector3(xDiv[x], yDiv[y], zDiv[z]), new Vector3(xDiv[x+1], yDiv[y+1], zDiv[z+1])), divisions - 1);
+                            subdivs[index].Fill();
+
                             index++;
                         }
             }
